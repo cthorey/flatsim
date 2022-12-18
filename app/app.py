@@ -8,16 +8,14 @@ project, simulation, revente = st.tabs(["project", "simulation", "revente"])
 with project:
     col0, col1 = st.columns(2)
     with col0:
-        offre = st.slider("Offre (M)", min_value=550, max_value=700, step=1, value=638)
+        offre = st.slider("Offre (M)", min_value=100, max_value=800, step=1, value=638)
         agence = st.slider(
             "Frais agence (M)", min_value=1, max_value=30, step=1, value=18
         )
         notaire_tx = st.slider(
             "Notaire tx (%)", min_value=1.0, max_value=10.0, value=7.5
         )
-        apport = st.slider(
-            "Apport (M)", min_value=200, max_value=300, step=1, value=240
-        )
+        apport = st.slider("Apport (M)", min_value=0, max_value=500, step=1, value=240)
         pjx = Project(offre=offre, agence=agence, notaire_tx=notaire_tx, apport=apport)
 
     with col1:
@@ -31,12 +29,12 @@ with simulation:
     col2, col3, col4 = st.columns(3)
     with col2:
         taux = st.number_input(
-            "Taux annuel (%)", min_value=1.0, max_value=3.0, step=0.01, value=2.35
+            "Taux annuel (%)", min_value=0.5, max_value=5.0, step=0.01, value=2.35
         )
-        duree = st.number_input("Durée (annee)", min_value=15, max_value=25, value=22)
+        duree = st.number_input("Durée (annee)", min_value=0, max_value=25, value=22)
     with col4:
         frais_dossier = st.number_input("Frais dossier", value=2445)
-        charges = st.number_input("Charge mensuel", value=341)
+        charges = st.number_input("Charges mensuel", value=341)
     with col3:
         assurance = st.number_input("Assurance mensuel", value=90)
         garanti = st.number_input("Garantie logement", value=4896)
@@ -51,7 +49,7 @@ with simulation:
         garantielogement=garanti,
     )
     st.markdown(
-        f"**Mensualite**: {sim.mensualite}, **Frais fixe**: {int(sim.fraisfixesdepart)}"
+        f"**Mensualité**: {sim.mensualite}, **Frais fixe**: {int(sim.fraisfixesdepart)}"
     )
     data = sim.run()
     data = pd.DataFrame(data)
@@ -73,17 +71,17 @@ with revente:
     rc0, rc1 = st.columns(2)
     with rc0:
         market = st.number_input(
-            "Evolution prix (%)", min_value=-20.0, max_value=20.0, step=1.0, value=0.0
+            "Evolution prix (%)", min_value=-30.0, max_value=30.0, step=1.0, value=0.0
         )
         revente = pjx.price * (1 + 0.01 * market)
         penalty_to_pay = st.radio("Paying penalty", ["Yes", "No"])
         penalty_to_pay = penalty_to_pay == "Yes"
     with rc1:
         tloyer = st.number_input(
-            "Loyer aujourd'hui", min_value=1600, max_value=2400, step=10, value=1650
+            "Loyer aujourd'hui", min_value=500, max_value=2500, step=10, value=1650
         )
         tcharge = st.number_input(
-            "Charge aujourd'hui", min_value=100, max_value=300, step=1, value=250
+            "Charge aujourd'hui", min_value=50, max_value=300, step=1, value=250
         )
     data["bilan"] = (
         revente
